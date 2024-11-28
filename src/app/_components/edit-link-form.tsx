@@ -1,34 +1,41 @@
 import InputController from "@/components/form/input-controller";
-import { Link } from "@/types/link";
+import { type Link } from "@/types/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { v4 as uuidv4 } from "uuid";
 import { FormModeType } from "./link-item-wrapper";
 
-const addLinkSchema = z.object({
+const editLinkSchema = z.object({
   label: z.string().trim().min(1),
   url: z.string().optional(),
 });
 
-export interface AddLinkFormProps {
-  addLink: (newLink: Link, parentId?: string) => void;
+export interface EditLinkProps extends Pick<Link, "label" | "url" | "id"> {
+  editLink: (updatedLink: Link, linkId: string) => void;
   handleFormMode: (mode: FormModeType) => void;
 }
 
-export default function AddLinkForm({
-  addLink,
+export default function EditLinkForm({
+  label,
+  url,
+  id,
+  editLink,
   handleFormMode,
-}: AddLinkFormProps) {
-  const { control, handleSubmit, reset } = useForm<
-    z.infer<typeof addLinkSchema>
-  >({
-    defaultValues: { label: "", url: "" },
-    resolver: zodResolver(addLinkSchema),
+}: EditLinkProps) {
+  const { control, handleSubmit, reset } = useForm({
+    values: { label, url },
+    resolver: zodResolver(editLinkSchema),
   });
 
-  const onSubmit = (data: z.infer<typeof addLinkSchema>) => {
-    addLink({ ...data, id: uuidv4(), links: [] });
+  const onSubmit = (data: z.infer<typeof editLinkSchema>) => {
+    editLink(
+      {
+        id,
+        ...data,
+        links: [],
+      },
+      id
+    );
     reset();
     handleFormMode(null);
   };

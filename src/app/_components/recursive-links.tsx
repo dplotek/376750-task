@@ -9,20 +9,28 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
-import LinkItem from "./link-item";
+import LinkItemWrapper from "./link-item-wrapper";
 
 interface RecursiveLinksProps {
   links: Link[];
   className?: string;
   setLinks: (newLinks: Link[]) => void;
+  addLink: (newLink: Link, parentId?: string) => void;
+  editLink: (updatedLink: Link, linkId: string) => void;
 }
 
 export default function RecursiveLinks({
   links,
   className,
   setLinks,
+  addLink,
+  editLink,
 }: RecursiveLinksProps) {
-  const pointerSensor = useSensor(PointerSensor);
+  const pointerSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 0.01,
+    },
+  });
   const sensors = useSensors(pointerSensor);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -53,12 +61,20 @@ export default function RecursiveLinks({
         <div className={`border ${className}`}>
           {links.map(({ id, label, links, url }) => (
             <SortableItem key={id} id={id}>
-              <LinkItem label={label} url={url} />
+              <LinkItemWrapper
+                label={label}
+                url={url}
+                addLink={(newLink) => addLink(newLink, id)}
+                editLink={(editedLink) => editLink(editedLink, id)}
+                id={id}
+              />
 
               {links && links.length > 0 && (
                 <RecursiveLinks
                   className="ml-5"
                   links={links}
+                  addLink={addLink}
+                  editLink={editLink}
                   setLinks={(newLinks) =>
                     handleSetLinks(newLinks, { id, label, links, url })
                   }

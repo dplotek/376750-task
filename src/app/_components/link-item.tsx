@@ -1,6 +1,16 @@
 import { Link } from "@/types/link";
+import { FormModeType } from "./link-item-wrapper";
+import { FormMode } from "@/types/formMode";
 
-export default function LinkItem({ label, url }: Pick<Link, "label" | "url">) {
+export interface LinkItemProps extends Pick<Link, "label" | "url"> {
+  handleFormMode: (mode: FormModeType) => void;
+}
+
+export default function LinkItem({
+  label,
+  url,
+  handleFormMode,
+}: LinkItemProps) {
   return (
     <div className="border border-sky-500 flex w-full bg-sky-300 space-x-4 items-center">
       <p>icon</p>
@@ -10,8 +20,10 @@ export default function LinkItem({ label, url }: Pick<Link, "label" | "url">) {
       </div>
       <div>
         <button>Usuń</button>
-        <button>edytuj</button>
-        <button>Dodaj pozycję menu</button>
+        <button onClick={() => handleFormMode(FormMode.EDIT)}>edytuj</button>
+        <button onClick={() => handleFormMode(FormMode.CREATE)}>
+          Dodaj pozycję menu
+        </button>
       </div>
     </div>
   );

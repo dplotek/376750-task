@@ -87,9 +87,45 @@ export default function LinkList() {
     );
   };
 
+  const handleEditLink = (updatedLink: Link, linkId: string) => {
+    const updatedLinks = links.map((link) =>
+      link.id === linkId
+        ? { ...link, ...updatedLink, links: link.links }
+        : {
+            ...link,
+            links: link.links
+              ? handleEditNestedLinks(link.links, updatedLink, linkId)
+              : [],
+          }
+    );
+    setLinks(updatedLinks);
+  };
+
+  const handleEditNestedLinks = (
+    links: Link[],
+    updatedLink: Link,
+    linkId: string
+  ): Link[] => {
+    return links.map((link) =>
+      link.id === linkId
+        ? { ...link, ...updatedLink, links: link.links }
+        : {
+            ...link,
+            links: link.links
+              ? handleEditNestedLinks(link.links, updatedLink, linkId)
+              : [],
+          }
+    );
+  };
+
   return (
     <div>
-      <RecursiveLinks links={links} setLinks={setLinks} />
+      <RecursiveLinks
+        links={links}
+        setLinks={setLinks}
+        editLink={handleEditLink}
+        addLink={handleAddLink}
+      />
       <AddLinkForm addLink={handleAddLink} />
     </div>
   );
