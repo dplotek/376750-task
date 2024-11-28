@@ -53,7 +53,7 @@ export default function LinkList() {
 
   return (
     <div>
-      <RecursiveLinks links={links} />
+      <RecursiveLinks links={links} setLinks={setLinks} />
     </div>
   );
 }
