@@ -9,6 +9,7 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { arrayMove, SortableContext } from "@dnd-kit/sortable";
+import LinkItem from "./link-item";
 
 interface RecursiveLinksProps {
   links: Link[];
@@ -50,20 +51,19 @@ export default function RecursiveLinks({
     >
       <SortableContext items={links.map((link) => link.id)}>
         <div className={`border ${className}`}>
-          {links.map((link) => (
-            <SortableItem key={link.id} id={link.id}>
-              <div className="border-red-400 border">
-                <p>{link.label}</p>
-                <p>{link.url}</p>
+          {links.map(({ id, label, links, url }) => (
+            <SortableItem key={id} id={id}>
+              <LinkItem label={label} url={url} />
 
-                {link.links && link.links.length > 0 && (
-                  <RecursiveLinks
-                    className="ml-5"
-                    links={link.links}
-                    setLinks={(newLinks) => handleSetLinks(newLinks, link)}
-                  />
-                )}
-              </div>
+              {links && links.length > 0 && (
+                <RecursiveLinks
+                  className="ml-5"
+                  links={links}
+                  setLinks={(newLinks) =>
+                    handleSetLinks(newLinks, { id, label, links, url })
+                  }
+                />
+              )}
             </SortableItem>
           ))}
         </div>
