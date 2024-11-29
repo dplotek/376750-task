@@ -3,8 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #f5f5f5;
   --foreground: #171717;
+  --primary: #ffffff;
+  --primary-900: #101828;
+  --primary-border: #d0d5dd;
+  --secondary: #f9fafb;
+  --secondary-700: #344054
+  --secondary-border: #eaecf0;
+  --primary-button-fg: #ffffff;
+  --primary-button-bg: #7f56d9;
+  --tertiary-600: #475467;
 }
 
 body {

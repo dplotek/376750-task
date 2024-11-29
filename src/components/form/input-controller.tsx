@@ -1,5 +1,6 @@
 "use client";
-import { type HTMLInputTypeAttribute } from "react";
+import { cn } from "@/utils/cn";
+import { ReactNode, type HTMLInputTypeAttribute } from "react";
 import {
   type Control,
   Controller,
@@ -14,6 +15,7 @@ interface InputControllerProps<T extends FieldValues> {
   type?: HTMLInputTypeAttribute;
   required?: boolean;
   placeholder: string;
+  icon?: ReactNode;
 }
 
 export default function InputController<T extends FieldValues>({
@@ -23,25 +25,43 @@ export default function InputController<T extends FieldValues>({
   type,
   required,
   placeholder,
+  icon,
 }: InputControllerProps<T>) {
   return (
     <Controller
       control={control}
       name={name}
       render={({ field, fieldState: { error } }) => (
-        <>
-          <label className="block" htmlFor={name}>
+        <div className="mb-2">
+          <label
+            className={cn(
+              "block font-medium mb-1.5",
+              error ? "text-red-400" : "text-secondary-700"
+            )}
+            htmlFor={name}
+          >
             {label + (required ? " *" : "")}
           </label>
-          <input
-            className="border border-red-400 block"
-            id={name}
-            type={type}
-            {...field}
-            placeholder={placeholder}
-          />
-          {error && <span>{error.message}</span>}
-        </>
+          <div className="relative">
+            {icon && (
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                {icon}
+              </span>
+            )}
+            <input
+              className={cn(
+                "border rounded-md w-full block text-base py-2 px-3",
+                error ? "border-red-400" : "border-primary-border",
+                icon ? "pl-10" : ""
+              )}
+              id={name}
+              type={type}
+              {...field}
+              placeholder={placeholder}
+            />
+          </div>
+          {error && <span className="text-red-400">{error.message}</span>}
+        </div>
       )}
     />
   );

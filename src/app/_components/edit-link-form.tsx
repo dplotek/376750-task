@@ -1,4 +1,7 @@
+import Button from "@/components/common/button";
 import InputController from "@/components/form/input-controller";
+import IconBin from "@/components/svgs/bin-icon";
+import IconSearch from "@/components/svgs/search-icon";
 import { FormModeType } from "@/types/formMode";
 import { type Link } from "@/types/link";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const editLinkSchema = z.object({
-  label: z.string().trim().min(1),
+  label: z.string().trim().min(1, { message: "Nazwa nie może być pusta" }),
   url: z.string().optional(),
 });
 
@@ -27,6 +30,8 @@ export default function EditLinkForm({
     resolver: zodResolver(editLinkSchema),
   });
 
+  const handleCloseForm = () => handleFormMode(null);
+
   const onSubmit = (data: z.infer<typeof editLinkSchema>) => {
     editLink(
       {
@@ -37,25 +42,49 @@ export default function EditLinkForm({
       id
     );
     reset();
-    handleFormMode(null);
+    handleCloseForm();
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <InputController
-        label="Nazwa"
-        control={control}
-        name="label"
-        placeholder="np. Promocje"
-      />
+    <div className="bg-primary border border-primary-border rounded-md px-6 py-5">
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex">
+          <div className="flex-1">
+            <InputController
+              label="Nazwa"
+              control={control}
+              name="label"
+              placeholder="np. Promocje"
+            />
 
-      <InputController
-        label="Link"
-        control={control}
-        name="url"
-        placeholder="Wklej lub wyszukaj"
-      />
-      <button className="bg-green-400">submit</button>
-    </form>
+            <InputController
+              label="Link"
+              control={control}
+              name="url"
+              placeholder="Wklej lub wyszukaj"
+              icon={<IconSearch />}
+            />
+          </div>
+
+          <div className="ml-4">
+            <IconBin />
+          </div>
+        </div>
+
+        <div className="flex space-x-2 mt-4">
+          <Button
+            variant="outlined"
+            color="secondary"
+            type="button"
+            onClick={handleCloseForm}
+          >
+            Anuluj
+          </Button>
+          <Button variant="outlined" color="primary">
+            Dodaj
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }

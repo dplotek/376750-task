@@ -49,6 +49,8 @@ const initialLinks: Link[] = [
   },
 ];
 
+// const initialLinks: Link[] = [];
+
 export default function LinkList() {
   const [links, setLinks] = useState<Link[]>(initialLinks);
 
@@ -119,7 +121,7 @@ export default function LinkList() {
   };
 
   return (
-    <>
+    <div className="border rounded-md border-primary-border overflow-hidden">
       <RecursiveLinks
         links={links}
         setLinks={setLinks}
@@ -127,6 +129,6 @@ export default function LinkList() {
         addLink={handleAddLink}
       />
       <TopLevelForm isEmpty={links.length === 0} addLink={handleAddLink} />
-    </>
+    </div>
   );
 }

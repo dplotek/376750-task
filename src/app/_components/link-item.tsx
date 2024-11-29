@@ -1,30 +1,48 @@
 import { Link } from "@/types/link";
-import { FormModeType } from "./link-item-wrapper";
-import { FormMode } from "@/types/formMode";
+import { FormMode, FormModeType } from "@/types/formMode";
+import DraggableIcon from "@/components/svgs/draggable-icon";
+import ButtonGroup from "@/components/common/button-group";
+import Button from "@/components/common/button";
+import { cn } from "@/utils/cn";
 
 export interface LinkItemProps extends Pick<Link, "label" | "url"> {
+  hasChildren?: boolean;
+  hasParent?: boolean;
+  isLastItem?: boolean;
   handleFormMode: (mode: FormModeType) => void;
 }
 
 export default function LinkItem({
+  hasChildren,
+  hasParent,
+  isLastItem,
   label,
   url,
   handleFormMode,
 }: LinkItemProps) {
+  const applyRoundedCorner = (hasChildren || isLastItem) && hasParent;
   return (
-    <div className="border border-sky-500 flex w-full bg-sky-300 space-x-4 items-center">
-      <p>icon</p>
+    <div
+      className={cn(
+        "bg-primary flex items-center py-4 px-6 border border-primary-border -mt-[1px] -ml-[1px] w-[calc(100%+2px)]",
+        applyRoundedCorner ? "rounded-bl-md" : ""
+      )}
+    >
+      <DraggableIcon />
       <div className="flex-1">
-        <p>{label}</p>
-        <p>{url}</p>
+        <p className="text-sm font-semibold text-primary-900">{label}</p>
+        <p className="text-sm text-tertiary-600">{url}</p>
       </div>
-      <div>
-        <button>Usuń</button>
-        <button onClick={() => handleFormMode(FormMode.EDIT)}>edytuj</button>
-        <button onClick={() => handleFormMode(FormMode.CREATE)}>
+
+      <ButtonGroup>
+        <Button variant="text">Usuń</Button>
+        <Button variant="text" onClick={() => handleFormMode(FormMode.EDIT)}>
+          Edytuj
+        </Button>
+        <Button variant="text" onClick={() => handleFormMode(FormMode.CREATE)}>
           Dodaj pozycję menu
-        </button>
-      </div>
+        </Button>
+      </ButtonGroup>
     </div>
   );
 }

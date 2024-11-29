@@ -5,7 +5,10 @@ import AddLinkForm, { type AddLinkFormProps } from "./add-link-form";
 import EditLinkForm, { type EditLinkProps } from "./edit-link-form";
 
 export default function LinkItemWrapper({
+  hasChildren,
+  hasParent,
   id,
+  isLastItem,
   label,
   url,
   addLink,
@@ -19,21 +22,36 @@ export default function LinkItemWrapper({
     setFormMode(mode);
   };
 
+  const linkItemProps = {
+    hasChildren,
+    hasParent,
+    isLastItem,
+    label,
+    url,
+    handleFormMode,
+  };
+
   return (
-    <>
-      <LinkItem label={label} url={url} handleFormMode={handleFormMode} />
+    <div className="bg-secondary">
+      <LinkItem {...linkItemProps} />
+
       {isCreateMode && (
-        <AddLinkForm addLink={addLink} handleFormMode={handleFormMode} />
+        <div className="px-6 py-5">
+          <AddLinkForm addLink={addLink} handleFormMode={handleFormMode} />
+        </div>
       )}
+
       {isEditMode && (
-        <EditLinkForm
-          label={label}
-          url={url}
-          editLink={editLink}
-          id={id}
-          handleFormMode={handleFormMode}
-        />
+        <div className="px-6 py-5">
+          <EditLinkForm
+            label={label}
+            url={url}
+            editLink={editLink}
+            id={id}
+            handleFormMode={handleFormMode}
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 }

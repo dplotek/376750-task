@@ -12,16 +12,16 @@ import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 import LinkItemWrapper from "./link-item-wrapper";
 
 interface RecursiveLinksProps {
+  hasParent?: boolean;
   links: Link[];
-  className?: string;
   setLinks: (newLinks: Link[]) => void;
   addLink: (newLink: Link, parentId?: string) => void;
   editLink: (updatedLink: Link, linkId: string) => void;
 }
 
 export default function RecursiveLinks({
+  hasParent,
   links,
-  className,
   setLinks,
   addLink,
   editLink,
@@ -58,27 +58,32 @@ export default function RecursiveLinks({
       onDragEnd={handleDragEnd}
     >
       <SortableContext items={links.map((link) => link.id)}>
-        <div className={`border ${className}`}>
-          {links.map(({ id, label, links, url }) => (
+        <div>
+          {links.map(({ id, label, links: childLinks, url }, index) => (
             <SortableItem key={id} id={id}>
               <LinkItemWrapper
                 label={label}
                 url={url}
                 addLink={(newLink) => addLink(newLink, id)}
                 editLink={(editedLink) => editLink(editedLink, id)}
+                isLastItem={index === links.length - 1}
+                hasChildren={childLinks && childLinks.length > 0}
+                hasParent={hasParent}
                 id={id}
               />
 
-              {links && links.length > 0 && (
-                <RecursiveLinks
-                  className="ml-5"
-                  links={links}
-                  addLink={addLink}
-                  editLink={editLink}
-                  setLinks={(newLinks) =>
-                    handleSetLinks(newLinks, { id, label, links, url })
-                  }
-                />
+              {childLinks && childLinks.length > 0 && (
+                <div className="ml-16">
+                  <RecursiveLinks
+                    links={childLinks}
+                    hasParent
+                    addLink={addLink}
+                    editLink={editLink}
+                    setLinks={(newLinks) =>
+                      handleSetLinks(newLinks, { id, label, links, url })
+                    }
+                  />
+                </div>
               )}
             </SortableItem>
           ))}

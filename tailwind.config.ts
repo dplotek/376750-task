@@ -11,6 +11,24 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        primary: {
+          DEFAULT: "var(--primary)",
+          900: "var(--primary-900)",
+          border: "var(--primary-border)",
+          "button-fg": "var(--primary-button-fg)",
+          "button-bg": "var(--primary-button-bg)",
+        },
+        secondary: {
+          DEFAULT: "var(--secondary)",
+          700: "var(--secondary-700)",
+          border: "var(--secondary-border)",
+        },
+        tertiary: {
+          600: "var(--tertiary-600)",
+        },
+      },
+      borderRadius: {
+        md: "0.5rem",
       },
     },
   },
