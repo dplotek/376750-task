@@ -15,16 +15,12 @@ interface RecursiveLinksProps {
   hasParent?: boolean;
   links: Link[];
   setLinks: (newLinks: Link[]) => void;
-  addLink: (newLink: Link, parentId?: string) => void;
-  editLink: (updatedLink: Link, linkId: string) => void;
 }
 
 export default function RecursiveLinks({
   hasParent,
   links,
   setLinks,
-  addLink,
-  editLink,
 }: RecursiveLinksProps) {
   const pointerSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -64,8 +60,6 @@ export default function RecursiveLinks({
               <LinkItemWrapper
                 label={label}
                 url={url}
-                addLink={(newLink) => addLink(newLink, id)}
-                editLink={(editedLink) => editLink(editedLink, id)}
                 isLastItem={index === links.length - 1}
                 hasChildren={childLinks && childLinks.length > 0}
                 hasParent={hasParent}
@@ -77,8 +71,6 @@ export default function RecursiveLinks({
                   <RecursiveLinks
                     links={childLinks}
                     hasParent
-                    addLink={addLink}
-                    editLink={editLink}
                     setLinks={(newLinks) =>
                       handleSetLinks(newLinks, { id, label, links, url })
                     }

@@ -11,8 +11,6 @@ export default function LinkItemWrapper({
   isLastItem,
   label,
   url,
-  addLink,
-  editLink,
 }: Omit<LinkItemProps & AddLinkFormProps & EditLinkProps, "handleFormMode">) {
   const [formMode, setFormMode] = useState<FormModeType>(null);
   const isEditMode = formMode === FormMode.EDIT;
@@ -37,7 +35,7 @@ export default function LinkItemWrapper({
 
       {isCreateMode && (
         <div className="px-6 py-5">
-          <AddLinkForm addLink={addLink} handleFormMode={handleFormMode} />
+          <AddLinkForm handleFormMode={handleFormMode} parentId={id} />
         </div>
       )}
 
@@ -46,7 +44,6 @@ export default function LinkItemWrapper({
           <EditLinkForm
             label={label}
             url={url}
-            editLink={editLink}
             id={id}
             handleFormMode={handleFormMode}
           />

@@ -1,5 +1,4 @@
 import InputController from "@/components/form/input-controller";
-import { Link } from "@/types/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -8,6 +7,7 @@ import { FormModeType } from "@/types/formMode";
 import Button from "@/components/common/button";
 import IconSearch from "@/components/svgs/search-icon";
 import IconBin from "@/components/svgs/bin-icon";
+import { useLinks } from "@/components/context/links-context";
 
 const addLinkSchema = z.object({
   label: z.string().trim().min(1, { message: "Nazwa nie może być pusta" }),
@@ -15,14 +15,15 @@ const addLinkSchema = z.object({
 });
 
 export interface AddLinkFormProps {
-  addLink: (newLink: Link, parentId?: string) => void;
+  parentId?: string;
   handleFormMode: (mode: FormModeType) => void;
 }
 
 export default function AddLinkForm({
-  addLink,
+  parentId,
   handleFormMode,
 }: AddLinkFormProps) {
+  const { handleAddLink } = useLinks();
   const { control, handleSubmit, reset } = useForm<
     z.infer<typeof addLinkSchema>
   >({
@@ -33,7 +34,7 @@ export default function AddLinkForm({
   const handleCloseForm = () => handleFormMode(null);
 
   const onSubmit = (data: z.infer<typeof addLinkSchema>) => {
-    addLink({ ...data, id: uuidv4(), links: [] });
+    handleAddLink({ ...data, id: uuidv4(), links: [] }, parentId);
     reset();
     handleCloseForm();
   };

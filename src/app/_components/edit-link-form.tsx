@@ -1,4 +1,5 @@
 import Button from "@/components/common/button";
+import { useLinks } from "@/components/context/links-context";
 import InputController from "@/components/form/input-controller";
 import IconBin from "@/components/svgs/bin-icon";
 import IconSearch from "@/components/svgs/search-icon";
@@ -14,7 +15,6 @@ const editLinkSchema = z.object({
 });
 
 export interface EditLinkProps extends Pick<Link, "label" | "url" | "id"> {
-  editLink: (updatedLink: Link, linkId: string) => void;
   handleFormMode: (mode: FormModeType) => void;
 }
 
@@ -22,9 +22,9 @@ export default function EditLinkForm({
   label,
   url,
   id,
-  editLink,
   handleFormMode,
 }: EditLinkProps) {
+  const { handleEditLink } = useLinks();
   const { control, handleSubmit, reset } = useForm({
     values: { label, url },
     resolver: zodResolver(editLinkSchema),
@@ -33,7 +33,7 @@ export default function EditLinkForm({
   const handleCloseForm = () => handleFormMode(null);
 
   const onSubmit = (data: z.infer<typeof editLinkSchema>) => {
-    editLink(
+    handleEditLink(
       {
         id,
         ...data,
@@ -81,7 +81,7 @@ export default function EditLinkForm({
             Anuluj
           </Button>
           <Button variant="outlined" color="primary">
-            Dodaj
+            Zapisz
           </Button>
         </div>
       </form>
