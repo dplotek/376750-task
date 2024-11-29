@@ -1,10 +1,8 @@
 import { useState } from "react";
 import LinkItem, { LinkItemProps } from "./link-item";
-import { FormMode } from "@/types/formMode";
+import { FormMode, FormModeType } from "@/types/formMode";
 import AddLinkForm, { type AddLinkFormProps } from "./add-link-form";
 import EditLinkForm, { type EditLinkProps } from "./edit-link-form";
-
-export type FormModeType = FormMode | null;
 
 export default function LinkItemWrapper({
   id,

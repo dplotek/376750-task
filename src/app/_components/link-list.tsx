@@ -3,7 +3,7 @@
 import { Link } from "@/types/link";
 import { useState } from "react";
 import RecursiveLinks from "./recursive-links";
-import AddLinkForm from "./add-link-form";
+import TopLevelForm from "./top-level-form";
 
 const initialLinks: Link[] = [
   {
@@ -119,14 +119,14 @@ export default function LinkList() {
   };
 
   return (
-    <div>
+    <>
       <RecursiveLinks
         links={links}
         setLinks={setLinks}
         editLink={handleEditLink}
         addLink={handleAddLink}
       />
-      <AddLinkForm addLink={handleAddLink} />
-    </div>
+      <TopLevelForm isEmpty={links.length === 0} addLink={handleAddLink} />
+    </>
   );
 }

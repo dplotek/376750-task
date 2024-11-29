@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
-import { FormModeType } from "./link-item-wrapper";
+import { FormModeType } from "@/types/formMode";
 
 const addLinkSchema = z.object({
   label: z.string().trim().min(1),

@@ -1,9 +1,9 @@
 import InputController from "@/components/form/input-controller";
+import { FormModeType } from "@/types/formMode";
 import { type Link } from "@/types/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { FormModeType } from "./link-item-wrapper";
 
 const editLinkSchema = z.object({
   label: z.string().trim().min(1),
